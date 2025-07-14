@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TechFABEC - Candidate Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      max-width: 700px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    .checkbox-group, .radio-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 5px;
+    }
+    .checkbox-group label, .radio-group label {
+      font-weight: normal;
+    }
+    button {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px;
+      margin-top: 20px;
+      border: none;
+      border-radius: 5px;
+      width: 100%;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .message {
+      margin-top: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .success { color: green; }
+    .error { color: red; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Candidate Registration - TechFABEC</h2>
+
+    {% if message %}
+      <div class="message {{ 'success' if success else 'error' }}">{{ message }}</div>
+    {% endif %}
+
+    <form action="/" method="POST" enctype="multipart/form-data">
+      <label>First Name:</label>
+      <input type="text" name="first_name" required>
+
+      <label>Last Name:</label>
+      <input type="text" name="last_name" required>
+
+      <label>College Name:</label>
+      <input type="text" name="college_name" required>
+
+      <label>Qualification:</label>
+      <input type="text" name="qualification" required>
+
+      <label>Passed Out Year:</label>
+      <input type="number" name="passed_out" required>
+
+      <label>Permanent Address:</label>
+      <textarea name="address" required></textarea>
+
+      <label>Mobile Number:</label>
+      <input type="text" name="mobile" required pattern="[0-9]{10}">
+
+      <label>Email ID:</label>
+      <input type="email" name="email" required>
+
+      <label>Course:</label>
+      <select name="course" required>
+        <option value="">--Select Course--</option>
+        <option value="AI">AI</option>
+        <option value="Embedded">Embedded</option>
+        <option value="Fullstack">Fullstack</option>
+        <option value="Frontend">Frontend</option>
+        <option value="Backend">Backend</option>
+        <option value="Testing">Testing</option>
+        <option value="Automation">Automation</option>
+      </select>
+
+      <label>Communication Skill:</label>
+      <div class="radio-group">
+        <label><input type="radio" name="communication" value="Good" required> Good</label>
+        <label><input type="radio" name="communication" value="Moderate"> Moderate</label>
+        <label><input type="radio" name="communication" value="Beginner"> Beginner</label>
+      </div>
+
+      <label>Basic Skills (you can select multiple):</label>
+      <div class="checkbox-group">
+        <label><input type="checkbox" name="skills" value="AI"> AI</label>
+        <label><input type="checkbox" name="skills" value="Embedded"> Embedded</label>
+        <label><input type="checkbox" name="skills" value="Fullstack"> Fullstack</label>
+        <label><input type="checkbox" name="skills" value="Frontend"> Frontend</label>
+        <label><input type="checkbox" name="skills" value="Backend"> Backend</label>
+        <label><input type="checkbox" name="skills" value="Testing"> Testing</label>
+        <label><input type="checkbox" name="skills" value="Automation"> Automation</label>
+      </div>
+
+      <label>Current Backlogs:</label>
+      <select name="backlogs" required onchange="document.getElementById('backlog_count').style.display = this.value === 'Yes' ? 'block' : 'none';">
+        <option value="">--Select--</option>
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+      </select>
+
+      <div id="backlog_count" style="display:none;">
+        <label>If Yes, how many?</label>
+        <input type="number" name="backlog_count">
+      </div>
+
+      <label>History of Arrears:</label>
+      <input type="number" name="arrears" required>
+
+      <label>Upload Your Resume:</label>
+      <input type="file" name="resume" accept=".pdf,.doc,.docx" required>
+
+      <button type="submit">Submit Application</button>
+    </form>
+  </div>
+</body>
+</html>
