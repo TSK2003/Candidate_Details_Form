@@ -2,68 +2,120 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>TechFABEC - Candidate Registration</title>
+  <title>Candidate Registration</title>
+
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      padding: 20px;
-    }
-    .container {
-      background: #fff;
-      max-width: 700px;
-      margin: auto;
-      padding: 25px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-    h2 {
-      text-align: center;
-      color: #333;
-    }
-    label {
-      display: block;
-      margin-top: 15px;
-      font-weight: bold;
-    }
-    input, select, textarea {
-      width: 100%;
-      padding: 8px;
-      margin-top: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
-    .checkbox-group, .radio-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 5px;
-    }
-    .checkbox-group label, .radio-group label {
-      font-weight: normal;
-    }
-    button {
-      background-color: #007BFF;
-      color: #fff;
-      padding: 10px;
-      margin-top: 20px;
-      border: none;
-      border-radius: 5px;
-      width: 100%;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .message {
-      margin-top: 20px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .success { color: green; }
-    .error { color: red; }
-  </style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f2f2f2, #d1e8ff);
+    padding: 20px;
+    transition: background 0.3s ease-in-out;
+  }
+  .container {
+    background: #ffffff;
+    max-width: 700px;
+    margin: auto;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  h2 {
+    text-align: center;
+    color: #007BFF;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #333;
+  }
+  input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+  }
+ 
+  .radio-group, .checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 5px;
+  }
+  .radio-group label, .checkbox-group label {
+    font-weight: normal;
+  }
+  select[multiple] {
+    height: auto;
+    min-height: 150px;
+    font-size: 14px;
+    border-radius: 8px;
+    padding: 10px;
+  }
+  button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 12px;
+    margin-top: 25px;
+    border: none;
+    border-radius: 8px;
+    width: 100%;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02);
+  }
+  .message {
+    margin-top: 20px;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease-in-out;
+  }
+  .success {
+    color: green;
+    background-color: #e6ffed;
+    border: 1px solid #b2f5ca;
+  }
+  .error {
+    color: red;
+    background-color: #ffe6e6;
+    border: 1px solid #f5b2b2;
+  }
+
+  .checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 5px;
+  margin-top: 10px;
+}
+
+.checkbox-grid label {
+  display: grid;
+  gap: 8px;
+  border-radius: 8px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+
+
+</style>
+
+
 </head>
 <body>
   <div class="container">
@@ -85,6 +137,10 @@
 
       <label>Qualification:</label>
       <input type="text" name="qualification" required>
+
+      <label>Department:</label>
+      <input type="text" name="department" required>
+
 
       <label>Passed Out Year:</label>
       <input type="number" name="passed_out" required>
@@ -111,22 +167,39 @@
       </select>
 
       <label>Communication Skill:</label>
-      <div class="radio-group">
-        <label><input type="radio" name="communication" value="Good" required> Good</label>
-        <label><input type="radio" name="communication" value="Moderate"> Moderate</label>
-        <label><input type="radio" name="communication" value="Beginner"> Beginner</label>
-      </div>
+      <select name="communication" required>
+        <option value="">--Select The Option--</option>
+        <option value="Good">Good</option>
+        <option value="Moderate">Moderate</option>
+        <option value="Beginner">Beginner</option>
+      </select>
 
-      <label>Basic Skills (you can select multiple):</label>
-      <div class="checkbox-group">
-        <label><input type="checkbox" name="skills" value="AI"> AI</label>
-        <label><input type="checkbox" name="skills" value="Embedded"> Embedded</label>
-        <label><input type="checkbox" name="skills" value="Fullstack"> Fullstack</label>
-        <label><input type="checkbox" name="skills" value="Frontend"> Frontend</label>
-        <label><input type="checkbox" name="skills" value="Backend"> Backend</label>
-        <label><input type="checkbox" name="skills" value="Testing"> Testing</label>
-        <label><input type="checkbox" name="skills" value="Automation"> Automation</label>
-      </div>
+
+
+     <label>Basic Knowledge Of Skills:</label>
+<div class="checkbox-grid">
+  <label><input type="checkbox" name="skills[]" value="AI"> AI</label>
+  <label><input type="checkbox" name="skills[]" value="Embedded"> Embedded</label>
+  <label><input type="checkbox" name="skills[]" value="Fullstack"> Fullstack</label>
+  <label><input type="checkbox" name="skills[]" value="Frontend"> Frontend</label>
+  <label><input type="checkbox" name="skills[]" value="Backend"> Backend</label>
+  <label><input type="checkbox" name="skills[]" value="Testing"> Testing</label>
+  <label><input type="checkbox" name="skills[]" value="Automation"> Automation</label>
+</div>
+
+<hr>
+
+<label>Basic Knowledge of Codings:</label>
+<div class="checkbox-grid">
+  <label><input type="checkbox" name="codings[]" value="C"> C</label>
+  <label><input type="checkbox" name="codings[]" value="C++"> C++</label>
+  <label><input type="checkbox" name="codings[]" value="Java"> Java</label>
+  <label><input type="checkbox" name="codings[]" value="Python"> Python</label>
+  <label><input type="checkbox" name="codings[]" value="JavaScript"> JavaScript</label>
+  <label><input type="checkbox" name="codings[]" value="HTML/CSS"> HTML/CSS</label>
+</div>
+
+<hr>
 
       <label>Current Backlogs:</label>
       <select name="backlogs" required onchange="document.getElementById('backlog_count').style.display = this.value === 'Yes' ? 'block' : 'none';">

@@ -25,8 +25,8 @@ sheet_client = gspread.authorize(creds)
 sheet = sheet_client.open_by_key(SHEET_ID).sheet1
 
 # Gmail credentials
-GMAIL_USER = "tskarthi2003@gmail.com"   # Your Gmail
-GMAIL_APP_PASSWORD = "jysu dvcs pddi dqcy"  # Replace this with your actual App Password
+GMAIL_USER = "tskarthi2003@gmail.com"
+GMAIL_APP_PASSWORD = "jysu dvcs pddi dqcy"  # App Password
 
 @app.route('/', methods=['GET', 'POST'])
 def register():
@@ -37,14 +37,17 @@ def register():
             last_name = request.form['last_name']
             college_name = request.form['college_name']
             qualification = request.form['qualification']
+            department = request.form['department']
             passed_out = request.form['passed_out']
             address = request.form['address']
             mobile = request.form['mobile']
             email = request.form['email']
             course = request.form['course']
             communication = request.form['communication']
-            skills_list = request.form.getlist('skills')
+            skills_list = request.form.getlist('skills[]')  
             skills = ', '.join(skills_list)
+            codings_list = request.form.getlist('codings[]')
+            codings = ', '.join(codings_list)
             backlogs = request.form['backlogs']
             backlog_count = request.form.get('backlog_count') or '0'
             arrears = request.form['arrears']
@@ -57,42 +60,55 @@ def register():
             file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             resume.save(file_path)
 
-            # Submitted Time
             submitted_time = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
 
-            # Append to Google Sheet
+            # ✅ Check for duplicate email
+            existing_emails = sheet.col_values(9)  
+            if email in existing_emails:
+              sheet.append_row([
+                  first_name,
+                  last_name,
+                  college_name,
+                  qualification,
+                  department,
+                  passed_out,
+                  address,
+                  mobile,
+                  email,
+                  course,
+                  communication,
+                  skills,
+                  codings,
+                  backlogs,
+                  backlog_count,
+                  arrears,
+                  filename,
+                  submitted_time,
+                  "Duplicate Entry"
+              ])
+              return render_template_string(form_template, message="✅ Submitted successfully! But You Have Already Used This Email For Registration", success=False)
+
+
+            # ✅ Append to Google Sheet
             sheet.append_row([
-                first_name,
-                last_name,
-                college_name,
-                qualification,
-                passed_out,
-                address,
-                mobile,
-                email,
-                course,
-                communication,
-                skills,
-                backlogs,
-                backlog_count,
-                arrears,
-                filename,
-                submitted_time
+                first_name, last_name, college_name, qualification, department, passed_out, address,
+                mobile, email, course, communication, skills, backlogs, backlog_count, arrears,
+                filename, submitted_time
             ])
 
-            # Send email with resume
+            # ✅ Send email with resume
             message = MIMEMultipart()
             message['From'] = GMAIL_USER
             message['To'] = GMAIL_USER
             message['Subject'] = f"New Candidate - {first_name} {last_name}"
 
-            # Email Body
             body = f"""
 📝 New Candidate Submission:
 
 👤 Name: {first_name} {last_name}
 🏫 College: {college_name}
 🎓 Qualification: {qualification}
+📚 Department: {department}
 📅 Passed Out: {passed_out}
 📍 Address: {address}
 📱 Mobile: {mobile}
@@ -104,7 +120,6 @@ def register():
 ⏮️ Arrears: {arrears}
 🕒 Submitted: {submitted_time}
 """
-
             message.attach(MIMEText(body, "plain"))
 
             with open(file_path, "rb") as f:
@@ -116,7 +131,7 @@ def register():
                 server.login(GMAIL_USER, GMAIL_APP_PASSWORD)
                 server.send_message(message)
 
-            return render_template_string(form_template, message="✅ Submitted successfully! Resume emailed and sheet updated.", success=True)
+            return render_template_string(form_template, message="✅ Submitted successfully!", success=True)
 
         except Exception as e:
             print("Error:", e)
@@ -128,4 +143,3 @@ def register():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
-
