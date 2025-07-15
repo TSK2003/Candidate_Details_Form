@@ -49,7 +49,7 @@ def register():
             codings_list = request.form.getlist('codings[]')
             codings = ', '.join(codings_list)
             backlogs = request.form['backlogs']
-            backlog_count = request.form.get('backlog_count') or '0'
+            backlog_count = request.form['backlog_count'] if request.form.get('backlog_count') else '0'
             arrears = request.form['arrears']
 
             # Save resume locally
@@ -89,12 +89,7 @@ def register():
               return render_template_string(form_template, message="✅ Submitted successfully! But You Have Already Used This Email For Registration", success=False)
 
 
-            # ✅ Append to Google Sheet
-            sheet.append_row([
-                first_name, last_name, college_name, qualification, department, passed_out, address,
-                mobile, email, course, communication, skills, backlogs, backlog_count, arrears,
-                filename, submitted_time
-            ])
+            
 
             # ✅ Send email with resume
             message = MIMEMultipart()
