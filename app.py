@@ -18,7 +18,7 @@ with open('form.html', 'r', encoding='utf-8') as file:
     form_template = file.read()
 
 # Google Sheet Setup
-SHEET_ID = "1gyVC_iHfDR4GDebCt1zjWWQ-1W4L4EhGotDIexdwvu8"
+SHEET_ID = "1jV6X6lNeqgJOBhjZcIlIZ17Xf0T9XIRZyX8z26JkwDg"
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 creds = Credentials.from_service_account_file("service_account.json", scopes=SCOPES)
 sheet_client = gspread.authorize(creds)
@@ -52,6 +52,8 @@ def register():
             backlog_count = request.form['backlog_count'] if request.form.get('backlog_count') else '0'
             arrears = request.form['arrears']
 
+            
+
             # Save resume locally
             resume = request.files['resume']
             if resume.filename == '':
@@ -63,32 +65,31 @@ def register():
             submitted_time = datetime.now().strftime("%Y-%m-%d %I:%M:%S %p")
 
             # ✅ Check for duplicate email
+            # ✅ Check for duplicate email
             existing_emails = sheet.col_values(9)  
             if email in existing_emails:
-              sheet.append_row([
-                  first_name,
-                  last_name,
-                  college_name,
-                  qualification,
-                  department,
-                  passed_out,
-                  address,
-                  mobile,
-                  email,
-                  course,
-                  communication,
-                  skills,
-                  codings,
-                  backlogs,
-                  backlog_count,
-                  arrears,
-                  filename,
-                  submitted_time,
-                  "Duplicate Entry"
-              ])
-              return render_template_string(form_template, message="✅ Submitted successfully! But You Have Already Used This Email For Registration", success=False)
+                sheet.append_row([
+                    first_name, last_name, college_name, qualification, department,
+                    passed_out, address, mobile, email, course, communication,
+                    skills, codings, backlogs, backlog_count, arrears,
+                    filename, submitted_time, "Duplicate Entry"
+                ])
+                return render_template_string(form_template, message="✅ Submitted successfully! But You Have Already Used This Email For Registration", success=False)
+            else:
+                # ✅ Insert new entry into Google Sheet
+                sheet.append_row([
+                    first_name, last_name, college_name, qualification, department,
+                    passed_out, address, mobile, email, course, communication,
+                    skills, codings, backlogs, backlog_count, arrears,
+                    filename, submitted_time, "New Entry"
+                ])
 
+            
 
+            print("Appending to sheet now:")
+            print([first_name, last_name, college_name, qualification, department, passed_out, address,
+       mobile, email, course, communication, skills, codings, backlogs,
+       backlog_count, arrears, filename, submitted_time])
             
 
             # ✅ Send email with resume
@@ -138,3 +139,4 @@ def register():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
